@@ -8,8 +8,13 @@ const PORT = 4000;
 // app.use(cors({
 //     origin: 'http://localhost:5173/'
 // }))
-app.use(cors())
+// app.use(cors())
 
+
+var corsOptions = {
+    origin: 'http://localhost:5173',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
 
 // create the connection to database
 const connection = mysql.createConnection({
@@ -23,7 +28,7 @@ app.get("/home", (req, res) => {
   res.status(200).json("Welcome, your app is working well");
 });
 
-app.get("/api", (req, res) => {
+app.get("/api", cors(corsOptions) , (req, res) => {
   connection.query("SELECT * FROM `test` ", function (err, results, fields) {
     res.json(results);
   });
